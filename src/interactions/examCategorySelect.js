@@ -8,11 +8,11 @@ const {
 } = require('./constants');
 
 async function handleExamCategorySelect(interaction) {
-  const channelId = interaction.customId.slice(EXAM_CATEGORY_PREFIX.length + 1);
+  const [channelId, roleId] = interaction.customId.slice(EXAM_CATEGORY_PREFIX.length + 1).split(':');
   const category = interaction.values[0];
 
   const modal = new ModalBuilder()
-    .setCustomId(`${EXAM_MODAL_PREFIX}:${channelId}:${category}`)
+    .setCustomId(`${EXAM_MODAL_PREFIX}:${channelId}:${roleId || ''}:${category}`)
     .setTitle(`Zgłoszenie — kat. ${category}`);
 
   const fullNameInput = new TextInputBuilder()

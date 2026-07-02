@@ -13,10 +13,10 @@ async function handleExamStartButton(interaction) {
     return;
   }
 
-  const channelId = interaction.customId.slice(EXAM_START_PREFIX.length + 1);
+  const [channelId, roleId] = interaction.customId.slice(EXAM_START_PREFIX.length + 1).split(':');
 
   const select = new StringSelectMenuBuilder()
-    .setCustomId(`${EXAM_CATEGORY_PREFIX}:${channelId}`)
+    .setCustomId(`${EXAM_CATEGORY_PREFIX}:${channelId}:${roleId || ''}`)
     .setPlaceholder('Wybierz kategorię prawa jazdy')
     .addOptions(
       LICENSE_CATEGORIES.map((category) => ({

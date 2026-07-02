@@ -14,7 +14,7 @@ const {
 async function handleExamModal(interaction) {
   await interaction.deferReply({ ephemeral: true });
 
-  const [channelId, category] = interaction.customId.slice(EXAM_MODAL_PREFIX.length + 1).split(':');
+  const [channelId, roleId, category] = interaction.customId.slice(EXAM_MODAL_PREFIX.length + 1).split(':');
   const fullName = interaction.fields.getTextInputValue(MODAL_FIELD_FULL_NAME).trim();
   const age = interaction.fields.getTextInputValue(MODAL_FIELD_AGE).trim();
   const robloxUsername = interaction.fields.getTextInputValue(MODAL_FIELD_ROBLOX).trim();
@@ -43,6 +43,7 @@ async function handleExamModal(interaction) {
     age,
     category,
     robloxData,
+    awardRoleId: roleId || null,
   });
   const [firstIndex, ...remaining] = pickRandomQuestionIndices();
   const firstQuestion = EXAM_QUESTIONS[firstIndex];

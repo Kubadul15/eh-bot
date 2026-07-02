@@ -6,8 +6,18 @@ const {
   ButtonStyle,
   ChannelType,
 } = require('discord.js');
-const { buildPanelEmbed, buildVerificationPanelEmbed, buildExamPanelEmbed } = require('../utils/embeds');
-const { CREATE_ID_BUTTON_ID, VERIFY_START_PREFIX, EXAM_START_PREFIX } = require('../interactions/constants');
+const {
+  buildPanelEmbed,
+  buildVerificationPanelEmbed,
+  buildExamPanelEmbed,
+  buildVehiclePanelEmbed,
+} = require('../utils/embeds');
+const {
+  CREATE_ID_BUTTON_ID,
+  VERIFY_START_PREFIX,
+  EXAM_START_PREFIX,
+  VEHICLE_START_PREFIX,
+} = require('../interactions/constants');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -41,6 +51,30 @@ module.exports = {
             .setName('kanal')
             .setDescription('Kanał, na który trafiają zdane prawa jazdy')
             .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+            .setRequired(true)
+        )
+        .addRoleOption((option) =>
+          option
+            .setName('ranga')
+            .setDescription('Opcjonalna rola nadawana automatycznie po zdanym egzaminie')
+            .setRequired(false)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('pojazd')
+        .setDescription('Wysyła panel rejestracji pojazdu (wymaga posiadania prawa jazdy)')
+        .addChannelOption((option) =>
+          option
+            .setName('kanal')
+            .setDescription('Kanał, na który trafiają zarejestrowane pojazdy')
+            .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
+            .setRequired(true)
+        )
+        .addRoleOption((option) =>
+          option
+            .setName('wymagana-ranga')
+            .setDescription('Rola wymagana do zarejestrowania pojazdu (np. nadawana po zdaniu prawa jazdy)')
             .setRequired(true)
         )
     ),
@@ -92,13 +126,31 @@ module.exports = {
 
     if (subcommand === 'prawojazdy') {
       const channel = interaction.options.getChannel('kanal');
+      const role = interaction.options.getRole('ranga');
 
-      const embed = buildExamPanelEmbed(channel);
+      const embed = buildExamPanelEmbed(channel, role);
       const row = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
-          .setCustomId(`${EXAM_START_PREFIX}:${channel.id}`)
+          .setCustomId(`${EXAM_START_PREFIX}:${channel.id}:${role ? role.id : ''}`)
           .setLabel('Podejdź do egzaminu')
           .setEmoji('🚗')
+          .setStyle(ButtonStyle.Primary)
+      );
+
+      await interaction.reply({ embeds: [embed], components: [row] });
+      return;
+    }
+
+    if (subcommand === 'pojazd') {
+      const channel = interaction.options.getChannel('kanal');
+      const requiredRole = interaction.options.getRole('wymagana-ranga');
+
+      const embed = buildVehiclePanelEmbed(channel, requiredRole);
+      const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId(`${VEHICLE_START_PREFIX}:${channel.id}:${requiredRole.id}`)
+          .setLabel('Zarejestruj pojazd')
+          .setEmoji('🚙')
           .setStyle(ButtonStyle.Primary)
       );
 

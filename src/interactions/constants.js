@@ -26,4 +26,17 @@ module.exports = {
   EXAM_MODAL_PREFIX: 'exam_modal',
   EXAM_ANSWER_PREFIX: 'exam_ans',
   EXAM_SEND_PREFIX: 'exam_send',
+
+  // Panel rejestracji pojazdu. Wymagana rola sprawdzana jest tylko na
+  // starcie (nikt nic nie dostaje), a kanal docelowy jest kodowany w
+  // customId dalej, tak jak w pozostalych panelach.
+  VEHICLE_START_PREFIX: 'vehicle_start',
+  VEHICLE_CATEGORY_PREFIX: 'vehicle_category',
+  VEHICLE_MODAL_PREFIX: 'vehicle_modal',
+  VEHICLE_SEND_PREFIX: 'vehicle_send',
+  MODAL_FIELD_VEHICLE_MAKE: 'vehicle_make',
+  MODAL_FIELD_VEHICLE_YEAR: 'vehicle_year',
+  MODAL_FIELD_VEHICLE_COLOR: 'vehicle_color',
+  MODAL_FIELD_VEHICLE_ENGINE: 'vehicle_engine',
+  MODAL_FIELD_VEHICLE_OWNER: 'vehicle_owner',
 };

@@ -9,6 +9,10 @@ const { handleExamCategorySelect } = require('./examCategorySelect');
 const { handleExamModal } = require('./examModal');
 const { handleExamAnswerButton } = require('./examAnswerButton');
 const { handleExamSendButton } = require('./examSendButton');
+const { handleVehicleStartButton } = require('./vehicleStartButton');
+const { handleVehicleCategorySelect } = require('./vehicleCategorySelect');
+const { handleVehicleModal } = require('./vehicleModal');
+const { handleVehicleSendButton } = require('./vehicleSendButton');
 const {
   CREATE_ID_BUTTON_ID,
   CREATE_ID_MODAL_ID,
@@ -22,6 +26,10 @@ const {
   EXAM_MODAL_PREFIX,
   EXAM_ANSWER_PREFIX,
   EXAM_SEND_PREFIX,
+  VEHICLE_START_PREFIX,
+  VEHICLE_CATEGORY_PREFIX,
+  VEHICLE_MODAL_PREFIX,
+  VEHICLE_SEND_PREFIX,
 } = require('./constants');
 
 async function routeInteraction(interaction, commands) {
@@ -44,6 +52,8 @@ async function routeInteraction(interaction, commands) {
       if (id.startsWith(`${EXAM_START_PREFIX}:`)) return await handleExamStartButton(interaction);
       if (id.startsWith(`${EXAM_ANSWER_PREFIX}:`)) return await handleExamAnswerButton(interaction);
       if (id.startsWith(`${EXAM_SEND_PREFIX}:`)) return await handleExamSendButton(interaction);
+      if (id.startsWith(`${VEHICLE_START_PREFIX}:`)) return await handleVehicleStartButton(interaction);
+      if (id.startsWith(`${VEHICLE_SEND_PREFIX}:`)) return await handleVehicleSendButton(interaction);
       return;
     }
 
@@ -51,6 +61,7 @@ async function routeInteraction(interaction, commands) {
       const id = interaction.customId;
 
       if (id.startsWith(`${EXAM_CATEGORY_PREFIX}:`)) return await handleExamCategorySelect(interaction);
+      if (id.startsWith(`${VEHICLE_CATEGORY_PREFIX}:`)) return await handleVehicleCategorySelect(interaction);
       return;
     }
 
@@ -60,6 +71,7 @@ async function routeInteraction(interaction, commands) {
       if (id === CREATE_ID_MODAL_ID) return await handleCreateIdModal(interaction);
       if (id.startsWith(`${VERIFY_MODAL_PREFIX}:`)) return await handleVerifyModal(interaction);
       if (id.startsWith(`${EXAM_MODAL_PREFIX}:`)) return await handleExamModal(interaction);
+      if (id.startsWith(`${VEHICLE_MODAL_PREFIX}:`)) return await handleVehicleModal(interaction);
     }
   } catch (error) {
     console.error('Błąd podczas obsługi interakcji:', error);

@@ -46,7 +46,26 @@ async function handleExamAnswerButton(interaction) {
       new ButtonBuilder().setCustomId(CANCEL_ID_BUTTON_ID).setLabel('Anuluj').setStyle(ButtonStyle.Danger)
     );
 
-    await interaction.editReply({ embeds: [resultEmbed], components: [row] });
+    let roleNote = '';
+    const roleFieldValue = getEmbedFieldValue(candidateEmbed, 'Rola po zdaniu');
+    const roleMatch = /<@&(\d+)>/.exec(roleFieldValue);
+    if (roleMatch) {
+      try {
+        const role = await interaction.guild.roles.fetch(roleMatch[1]);
+        if (!role) throw new Error('Rola z panelu prawa jazdy już nie istnieje na serwerze.');
+        await interaction.member.roles.add(role);
+        roleNote = `\n🔑 Otrzymujesz rolę <@&${roleMatch[1]}>.`;
+      } catch (error) {
+        console.error('Błąd podczas nadawania roli po zdanym egzaminie:', error);
+        roleNote = '\n⚠️ Nie udało się nadać roli — skontaktuj się z administracją.';
+      }
+    }
+
+    await interaction.editReply({
+      content: `🎉 Gratulacje, zdałeś egzamin!${roleNote}`,
+      embeds: [resultEmbed],
+      components: [row],
+    });
   } else {
     setFailureCooldown(interaction.user.id);
     const cooldownMinutes = Math.round(COOLDOWN_MS / 60000);
