@@ -1,4 +1,5 @@
 const { getUserDescription } = require('../utils/roblox');
+const { sendAdminLog } = require('../utils/adminLog');
 
 async function handleVerifyCheckButton(interaction) {
   await interaction.deferUpdate();
@@ -45,6 +46,14 @@ async function handleVerifyCheckButton(interaction) {
     content: `✅ Zweryfikowano! Otrzymujesz rolę <@&${roleId}>.`,
     embeds: interaction.message.embeds,
     components: [],
+  });
+
+  await sendAdminLog(interaction.client, {
+    title: '🔐 Weryfikacja Roblox zakończona sukcesem',
+    description:
+      `**Kto:** <@${interaction.user.id}> (${interaction.user.tag})\n` +
+      `**Rola:** <@&${roleId}>\n` +
+      `**Roblox ID:** ${robloxUserId}`,
   });
 }
 

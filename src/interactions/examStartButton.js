@@ -1,8 +1,18 @@
 const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 const { LICENSE_CATEGORIES } = require('../data/licenseCategories');
+const { getCooldownExpiresAt } = require('../utils/cooldown');
 const { EXAM_START_PREFIX, EXAM_CATEGORY_PREFIX } = require('./constants');
 
 async function handleExamStartButton(interaction) {
+  const cooldownExpiresAt = getCooldownExpiresAt(interaction.user.id);
+  if (cooldownExpiresAt) {
+    await interaction.reply({
+      content: `⏳ Oblałeś ostatnio egzamin. Możesz podejść ponownie <t:${Math.floor(cooldownExpiresAt / 1000)}:R>.`,
+      ephemeral: true,
+    });
+    return;
+  }
+
   const channelId = interaction.customId.slice(EXAM_START_PREFIX.length + 1);
 
   const select = new StringSelectMenuBuilder()

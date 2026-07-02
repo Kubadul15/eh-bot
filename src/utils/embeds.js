@@ -158,6 +158,11 @@ function buildExamResultEmbed({ candidateEmbed, score, total, passed, licenseNum
   return embed;
 }
 
+function getEmbedFieldValue(embed, nameIncludes) {
+  const field = embed.fields?.find((f) => f.name.includes(nameIncludes));
+  return field ? field.value : 'brak danych';
+}
+
 module.exports = {
   buildPanelEmbed,
   buildIdCardEmbed,
@@ -167,4 +172,5 @@ module.exports = {
   buildExamCandidateEmbed,
   buildExamQuestionEmbed,
   buildExamResultEmbed,
+  getEmbedFieldValue,
 };

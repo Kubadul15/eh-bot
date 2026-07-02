@@ -1,7 +1,7 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { verifyRobloxUsername } = require('../utils/roblox');
 const { buildExamCandidateEmbed, buildExamQuestionEmbed } = require('../utils/embeds');
-const { buildAnswerButtons } = require('../utils/exam');
+const { buildAnswerButtons, pickRandomQuestionIndices, EXAM_QUESTION_COUNT } = require('../utils/exam');
 const { EXAM_QUESTIONS } = require('../data/examQuestions');
 const {
   EXAM_MODAL_PREFIX,
@@ -44,10 +44,11 @@ async function handleExamModal(interaction) {
     category,
     robloxData,
   });
-  const firstQuestion = EXAM_QUESTIONS[0];
-  const questionEmbed = buildExamQuestionEmbed(firstQuestion, 0, EXAM_QUESTIONS.length, 0);
+  const [firstIndex, ...remaining] = pickRandomQuestionIndices();
+  const firstQuestion = EXAM_QUESTIONS[firstIndex];
+  const questionEmbed = buildExamQuestionEmbed(firstQuestion, 0, EXAM_QUESTION_COUNT, 0);
 
-  const answerRow = buildAnswerButtons(channelId, 0, 0, firstQuestion);
+  const answerRow = buildAnswerButtons(channelId, 0, firstIndex, remaining, firstQuestion);
   const abortRow = new ActionRowBuilder().addComponents(
     new ButtonBuilder().setCustomId(CANCEL_ID_BUTTON_ID).setLabel('Przerwij egzamin').setStyle(ButtonStyle.Danger)
   );

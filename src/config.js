@@ -16,4 +16,6 @@ module.exports = {
   idPrefix: process.env.ID_PREFIX || 'EH',
   serverName: process.env.SERVER_NAME || 'Emergency Hamburg ROLEPLAY | Gdansk RP',
   embedColor: process.env.EMBED_COLOR || '#8b5cf6',
+  // Opcjonalny - jesli nie ustawiony, logowanie administracyjne jest pomijane.
+  adminLogChannelId: process.env.ADMIN_LOG_CHANNEL_ID || null,
 };

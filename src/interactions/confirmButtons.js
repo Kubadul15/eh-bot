@@ -1,4 +1,5 @@
 const config = require('../config');
+const { sendAdminLog } = require('../utils/adminLog');
 
 async function handleSendIdButton(interaction) {
   const embed = interaction.message.embeds[0];
@@ -11,6 +12,13 @@ async function handleSendIdButton(interaction) {
       content: `✅ Dowód został wysłany na kanał <#${config.targetChannelId}>.`,
       embeds: [embed],
       components: [],
+    });
+
+    await sendAdminLog(interaction.client, {
+      title: '🪪 Dowód Osobisty RP wysłany',
+      description:
+        `**Kto:** <@${interaction.user.id}> (${interaction.user.tag})\n` +
+        `**Kanał:** <#${config.targetChannelId}>`,
     });
   } catch (error) {
     console.error('Błąd podczas wysyłania dowodu na kanał docelowy:', error);
