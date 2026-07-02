@@ -16,4 +16,13 @@ module.exports = {
   VERIFY_MODAL_PREFIX: 'verify_modal',
   VERIFY_CHECK_PREFIX: 'verify_check',
   MODAL_FIELD_VERIFY_ROBLOX: 'verify_roblox_username',
+
+  // Panel egzaminu na Prawo Jazdy RP. Kanal docelowy, numer pytania
+  // i dotychczasowy wynik sa zakodowane w customId przyciskow, a dane
+  // kandydata (imie, wiek, Roblox) w embedzie wiadomosci - dzieki temu
+  // caly wieloetapowy egzamin jest bezstanowy i przetrwa restart bota.
+  EXAM_START_PREFIX: 'exam_start',
+  EXAM_MODAL_PREFIX: 'exam_modal',
+  EXAM_ANSWER_PREFIX: 'exam_ans',
+  EXAM_SEND_PREFIX: 'exam_send',
 };

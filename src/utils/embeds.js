@@ -87,4 +87,83 @@ function buildVerificationCodeEmbed({ discordUser, robloxData, code }) {
   return embed;
 }
 
-module.exports = { buildPanelEmbed, buildIdCardEmbed, buildVerificationPanelEmbed, buildVerificationCodeEmbed };
+function buildExamPanelEmbed(targetChannel) {
+  return new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setTitle('🚗 Panel — Egzamin na Prawo Jazdy RP')
+    .setDescription(
+      'Kliknij przycisk poniżej, aby podejść do egzaminu na **Prawo Jazdy RP**.\n\n' +
+        'Najpierw wypełnisz krótki formularz zgłoszeniowy (imię i nazwisko RP, wiek RP, nick Roblox), ' +
+        'a następnie odpowiesz na pytania egzaminu teoretycznego — dokładnie jak na prawdziwym egzaminie.\n\n' +
+        `Po zdanym egzaminie Twoje Prawo Jazdy RP trafi na kanał ${targetChannel}.`
+    )
+    .setFooter({ text: config.serverName });
+}
+
+function buildExamCandidateEmbed({ discordUser, fullName, age, robloxData }) {
+  const embed = new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setTitle('🚗 Egzamin na Prawo Jazdy RP')
+    .setAuthor({ name: discordUser.tag, iconURL: discordUser.displayAvatarURL() })
+    .addFields(
+      { name: '👤 Dane', value: fullName, inline: false },
+      { name: '📅 Wiek', value: String(age), inline: true },
+      {
+        name: '🎲 Nick Roblox',
+        value: `[@${robloxData.name}](https://www.roblox.com/users/${robloxData.id}/profile)`,
+        inline: true,
+      }
+    )
+    .setFooter({ text: config.serverName });
+
+  if (robloxData.avatarUrl) {
+    embed.setThumbnail(robloxData.avatarUrl);
+  }
+
+  return embed;
+}
+
+function buildExamQuestionEmbed(question, index, total, score) {
+  return new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setTitle(`Pytanie ${index + 1} / ${total}`)
+    .setDescription(question.question)
+    .setFooter({ text: `Aktualny wynik: ${score}/${index}` });
+}
+
+function buildExamResultEmbed({ candidateEmbed, score, total, passed, licenseNumber }) {
+  const embed = EmbedBuilder.from(candidateEmbed);
+
+  if (passed) {
+    embed
+      .setColor(config.embedColor)
+      .setTitle('🚗 Prawo Jazdy RP — Kategoria B')
+      .addFields(
+        { name: '✅ Wynik egzaminu', value: `${score}/${total}`, inline: true },
+        { name: '🆔 Numer', value: licenseNumber, inline: true }
+      )
+      .setTimestamp();
+  } else {
+    embed
+      .setColor('#e02b2b')
+      .setTitle('❌ Egzamin niezdany')
+      .addFields({
+        name: 'Wynik',
+        value: `${score}/${total} — spróbuj ponownie, korzystając z przycisku w panelu.`,
+        inline: false,
+      });
+  }
+
+  return embed;
+}
+
+module.exports = {
+  buildPanelEmbed,
+  buildIdCardEmbed,
+  buildVerificationPanelEmbed,
+  buildVerificationCodeEmbed,
+  buildExamPanelEmbed,
+  buildExamCandidateEmbed,
+  buildExamQuestionEmbed,
+  buildExamResultEmbed,
+};
