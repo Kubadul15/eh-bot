@@ -15,7 +15,36 @@ Bot Discord do obsługi paneli weryfikacyjnych serwera. Aktualnie dostępne pane
   bot automatycznie nadaje mu skonfigurowaną rolę. Rola i dane weryfikacji są zakodowane w przyciskach, więc
   nic nie trzeba zapisywać w bazie danych — działa też po restarcie bota.
 
+- **`/panel prawojazdy kanal:#kanał [ranga:@rola]`** — publikuje embed z przyciskiem **"Podejdź do
+  egzaminu"**. Po kliknięciu gracz wybiera z listy **kategorię prawa jazdy** (pełna lista jak w polskim
+  systemie: AM, A1, A2, A, B1, B, B+E, C1, C1+E, C, C+E, D1, D1+E, D, D+E, T — `src/data/licenseCategories.js`),
+  potem wypełnia formularz zgłoszeniowy (imię i nazwisko RP, wiek RP, nick Roblox — weryfikowany tak samo
+  jak w dowodzie), a na końcu, tak jak na prawdziwym egzaminie, odpowiada po kolei na 6 losowo wybranych
+  pytań teoretycznych (z puli ~20 w `src/data/examQuestions.js` — inny zestaw za każdym podejściem) z 4
+  odpowiedziami do wyboru. Dopuszczalna jest tylko jedna pomyłka — po zdanym egzaminie pojawia się karta
+  **Prawo Jazdy RP** (bardzo podobna do Dowodu Osobistego RP) z wybraną kategorią, numerem i wynikiem,
+  którą gracz wysyła przyciskiem **Wyślij** na wskazany przy tworzeniu panelu kanał. Jeśli podasz opcjonalny
+  parametr `ranga`, bot **automatycznie nada tę rolę** po zdanym egzaminie (np. rolę "Kierowca", wymaganą
+  potem przez panel rejestracji pojazdu — patrz niżej). Po oblanym egzaminie obowiązuje 15-minutowy
+  cooldown, zanim będzie można podejść ponownie. Cały przebieg egzaminu (kategoria, rola do nadania,
+  wylosowana kolejność pytań, wynik, kanał docelowy) jest zakodowany w przyciskach i treści wiadomości,
+  więc też przetrwa restart bota.
+
+- **`/panel pojazd kanal:#kanał wymagana-ranga:@rola`** — publikuje embed z przyciskiem **"Zarejestruj
+  pojazd"**. Klik działa **tylko** dla graczy posiadających `wymagana-ranga` (np. rolę nadawaną
+  automatycznie po zdaniu prawa jazdy — patrz wyżej); bez niej bot odpowie błędem i nic więcej się nie
+  wydarzy. Jeśli rola się zgadza, gracz wybiera z listy **typ/kategorię pojazdu** (ta sama lista co przy
+  prawie jazdy), a potem wypełnia formularz: marka i model, rok produkcji, kolor, silnik/pojemność,
+  właściciel (imię i nazwisko RP). Bot automatycznie generuje **numer rejestracyjny** w stylu Gdańska
+  (`GD X1234`), 17-znakowy **numer VIN**, datę rejestracji oraz roczną ważność przeglądu i OC — wszystko
+  trafia na kartę **Dowód Rejestracyjny Pojazdu RP**, którą gracz wysyła przyciskiem **Wyślij** na
+  skonfigurowany kanał. Bez żadnej bazy danych — kanał docelowy i kategoria są zakodowane w przyciskach.
+
 Kolejne panele (np. `/panel ...`) można dopisywać jako kolejne subkomendy w `src/commands/panel.js`.
+
+Opcjonalnie: jeśli ustawisz zmienną `ADMIN_LOG_CHANNEL_ID`, bot będzie wysyłał na ten kanał log każdego
+wysłanego dowodu, udanej weryfikacji Roblox oraz wyniku (zdany/niezdany) egzaminu na prawo jazdy — razem z
+tym, kto i kiedy to zrobił. Bez tej zmiennej logowanie jest po prostu pomijane.
 
 ## Wymagania
 
@@ -51,6 +80,7 @@ Kolejne panele (np. `/panel ...`) można dopisywać jako kolejne subkomendy w `s
    | `ID_PREFIX` | np. `EH` — prefiks numeru dowodu |
    | `SERVER_NAME` | np. `Emergency Hamburg ROLEPLAY \| Gdańsk RP` |
    | `EMBED_COLOR` | np. `#8b5cf6` |
+   | `ADMIN_LOG_CHANNEL_ID` | opcjonalnie — ID kanału logów administracyjnych |
 
 5. Po zapisaniu zmiennych Railway zbuduje i uruchomi bota. `npm start` najpierw rejestruje/aktualizuje
    komendy slash (`node src/deploy-commands.js`), a potem startuje bota (`node src/index.js`) —
