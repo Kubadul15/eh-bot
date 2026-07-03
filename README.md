@@ -104,12 +104,15 @@ W odróżnieniu od `/panel` (który tylko **publikuje** panele dla graczy), `/po
   Nadkomisarz → Komendant (7 ról, po jednej na rangę) plus opcjonalną rolę specjalnej jednostki **CBŚP**
   (przydzielaną osobno, poza drabinką). Wszystko zapisuje się w trwałym rejestrze (patrz niżej) — wystarczy
   uruchomić raz.
-- **`/policja sprawdz-gracza nick:<nick_roblox`** *(wymaga roli `@Policja`)* — pełny profil gracza po nicku
-  Roblox: dane z dowodu, posiadane kategorie prawa jazdy (+ status zawieszenia), zarejestrowane pojazdy,
-  rejestr karny (liczba i suma mandatów, ostatnie 3), status na liście gończej, a jeśli sam jest
+- **`/policja sprawdz-gracza nick:<nick_roblox>`** *(wymaga roli `@Policja`, odpowiedź widoczna dla
+  wszystkich na kanale)* — pełny profil gracza po nicku Roblox: dane z dowodu, posiadane kategorie prawa
+  jazdy (+ status zawieszenia), zarejestrowane pojazdy, rejestr karny (liczba, suma mandatów, ostatnie 3 z
+  punktami karnymi), **aktualne punkty karne (x/24)**, status na liście gończej, a jeśli sam jest
   funkcjonariuszem — jego rangę i przynależność do CBŚP.
-- **`/policja mandat gracz:@osoba kwota:<zł> powod:<opis>`** *(rola `@Policja`)* — wystawia mandat, trafia do
-  rejestru karnego gracza i jest widoczny w `sprawdz-gracza`.
+- **`/policja mandat gracz:@osoba kwota:<zł> punkty:<1-15> powod:<opis>`** *(rola `@Policja`)* — wystawia
+  mandat z **punktami karnymi jak w prawdziwym systemie**: punkty się sumują i **wygasają rok po
+  wystawieniu mandatu**, a po przekroczeniu **24 aktywnych punktów prawo jazdy jest automatycznie
+  zawieszane**. Cały mandat trafia do rejestru karnego gracza i jest widoczny w `sprawdz-gracza`.
 - **`/policja goniony gracz:@osoba akcja:<Dodaj/Usuń> [powod]`** *(rola `@Policja`)* — ogłasza lub zdejmuje
   list gończy (np. po zatrzymaniu); status widoczny w `sprawdz-gracza`.
 - **`/policja zawieszenie gracz:@osoba akcja:<Zawieś/Przywróć> [powod]`** *(rola `@Policja`)* — blokuje albo

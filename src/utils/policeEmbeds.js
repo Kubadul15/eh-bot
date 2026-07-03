@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 const config = require('../config');
 const { getRankLabel } = require('../data/policeRanks');
+const { MAX_POINTS_BEFORE_SUSPENSION } = require('./registry');
 
 function formatDuration(ms) {
   const totalMinutes = Math.floor(ms / 60000);
@@ -9,7 +10,7 @@ function formatDuration(ms) {
   return `${hours}h ${minutes}min`;
 }
 
-function buildSprawdzGraczaEmbed({ nick, discordId, record }) {
+function buildSprawdzGraczaEmbed({ nick, discordId, record, activePoints }) {
   const embed = new EmbedBuilder()
     .setColor(record && record.wanted ? '#e02b2b' : config.embedColor)
     .setTitle(`🔎 Profil gracza — ${nick}`)
@@ -65,7 +66,7 @@ function buildSprawdzGraczaEmbed({ nick, discordId, record }) {
     const lastCitations = record.citations
       .slice(-3)
       .reverse()
-      .map((c) => `• ${c.amount} zł — ${c.reason} (<@${c.issuedBy}>)`)
+      .map((c) => `• ${c.amount} zł, ${c.points || 0} pkt — ${c.reason} (<@${c.issuedBy}>)`)
       .join('\n');
     embed.addFields({
       name: `📋 Rejestr karny — ${record.citations.length} mandat(y), łącznie ${total} zł`,
@@ -75,6 +76,16 @@ function buildSprawdzGraczaEmbed({ nick, discordId, record }) {
   } else {
     embed.addFields({ name: '📋 Rejestr karny', value: 'Czysty — brak mandatów.', inline: false });
   }
+
+  const points = activePoints || 0;
+  embed.addFields({
+    name: '🔢 Punkty karne (aktywne)',
+    value:
+      `**${points} / ${MAX_POINTS_BEFORE_SUSPENSION}**` +
+      (points >= MAX_POINTS_BEFORE_SUSPENSION ? ' — 🚫 przekroczono limit!' : '') +
+      '\n*Punkty wygasają rok po wystawieniu mandatu.*',
+    inline: false,
+  });
 
   embed.addFields({
     name: '🚨 Status poszukiwań',
@@ -92,18 +103,29 @@ function buildSprawdzGraczaEmbed({ nick, discordId, record }) {
   return embed;
 }
 
-function buildMandatEmbed({ officer, target, amount, reason }) {
-  return new EmbedBuilder()
+function buildMandatEmbed({ officer, target, amount, points, reason, activePoints, autoSuspended }) {
+  const embed = new EmbedBuilder()
     .setColor('#e02b2b')
     .setTitle('📋 Wystawiono mandat')
     .addFields(
       { name: '👤 Ukarany', value: `${target}`, inline: true },
       { name: '👮 Funkcjonariusz', value: `${officer}`, inline: true },
       { name: '💵 Kwota', value: `${amount} zł`, inline: true },
+      { name: '🔢 Punkty karne', value: `${points} (aktywne: ${activePoints}/${MAX_POINTS_BEFORE_SUSPENSION})`, inline: true },
       { name: '📝 Powód', value: reason, inline: false }
     )
     .setFooter({ text: config.serverName })
     .setTimestamp();
+
+  if (autoSuspended) {
+    embed.addFields({
+      name: '🚫 Automatyczne zawieszenie prawa jazdy',
+      value: `Przekroczono ${MAX_POINTS_BEFORE_SUSPENSION} aktywnych punktów karnych — prawo jazdy zostało zawieszone.`,
+      inline: false,
+    });
+  }
+
+  return embed;
 }
 
 function buildGonionyEmbed({ officer, target, action, reason }) {
