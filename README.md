@@ -136,6 +136,10 @@ nawet jeśli zapomnisz go dodać w `GUILD_ID` na Railway — nie trzeba go tam o
   jazdy (+ status zawieszenia), zarejestrowane pojazdy, rejestr karny (liczba, suma mandatów, ostatnie 3 z
   punktami karnymi), **aktualne punkty karne (x/24)**, status na liście gończej, a jeśli sam jest
   funkcjonariuszem — jego rangę i przynależność do CBŚP.
+- **`/policja sprawdz-auto rejestracja:<numer_rejestracyjny>`** *(rola `@Policja`)* — odwrotność
+  `sprawdz-gracza`: podajesz numer rejestracyjny pojazdu (np. z kontroli drogowej), a bot przeszukuje
+  wszystkie zarejestrowane pojazdy w bazie i pokazuje pełne dane auta oraz **do kogo (jakiego konta
+  Discord) należy** — bez potrzeby znajomości nicku Roblox właściciela.
 - **`/policja mandat gracz:@osoba kwota:<zł> punkty:<1-15> powod:<opis>`** *(rola `@Policja`)* — wystawia
   mandat z **punktami karnymi jak w prawdziwym systemie**: punkty się sumują i **wygasają tydzień po
   wystawieniu mandatu** (skrócone z realnego roku na potrzeby tempa RP), a po przekroczeniu **24 aktywnych

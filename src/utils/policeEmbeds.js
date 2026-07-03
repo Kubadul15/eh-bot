@@ -221,6 +221,32 @@ function buildCbspEmbed({ officer, target, action }) {
     .setTimestamp();
 }
 
+function buildSprawdzAutoEmbed({ plateNumber, discordId, discordTag, vehicle }) {
+  const embed = new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setTitle(`🚙 Sprawdzenie pojazdu — ${plateNumber}`)
+    .setFooter({ text: config.serverName })
+    .setTimestamp();
+
+  if (!vehicle) {
+    embed.setDescription('Brak pojazdu o takim numerze rejestracyjnym w rejestrze.');
+    return embed;
+  }
+
+  embed.addFields(
+    { name: '👤 Właściciel (konto Discord)', value: `<@${discordId}> (${discordTag || 'nieznany tag'})`, inline: false },
+    { name: '🚙 Marka i model', value: vehicle.make, inline: true },
+    { name: '📅 Rok produkcji', value: String(vehicle.year), inline: true },
+    { name: '🎨 Kolor', value: vehicle.color, inline: true },
+    { name: '🔧 Silnik', value: vehicle.engine, inline: true },
+    { name: '🚦 Kategoria', value: vehicle.category, inline: true },
+    { name: '🔢 Numer rejestracyjny', value: `\`${vehicle.plateNumber}\``, inline: true },
+    { name: '🆔 VIN', value: `\`${vehicle.vin}\``, inline: false }
+  );
+
+  return embed;
+}
+
 module.exports = {
   buildSprawdzGraczaEmbed,
   buildMandatEmbed,
@@ -230,4 +256,5 @@ module.exports = {
   buildRankingEmbed,
   buildAwansEmbed,
   buildCbspEmbed,
+  buildSprawdzAutoEmbed,
 };

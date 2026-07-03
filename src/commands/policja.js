@@ -16,6 +16,7 @@ const {
   buildRankingEmbed,
   buildAwansEmbed,
   buildCbspEmbed,
+  buildSprawdzAutoEmbed,
 } = require('../utils/policeEmbeds');
 
 const builder = new SlashCommandBuilder()
@@ -93,6 +94,13 @@ builder.addSubcommand((sub) =>
     .setName('sprawdz-gracza')
     .setDescription('Sprawdza pełny profil gracza po nicku Roblox (dowód, prawo jazdy, pojazdy, mandaty...)')
     .addStringOption((o) => o.setName('nick').setDescription('Nick Roblox gracza').setRequired(true))
+);
+
+builder.addSubcommand((sub) =>
+  sub
+    .setName('sprawdz-auto')
+    .setDescription('Sprawdza, do kogo należy pojazd o podanym numerze rejestracyjnym')
+    .addStringOption((o) => o.setName('rejestracja').setDescription('Numer rejestracyjny pojazdu').setRequired(true))
 );
 
 builder.addSubcommand((sub) =>
@@ -379,6 +387,22 @@ module.exports = {
       const activePoints = discordId ? registry.getActivePoints(discordId) : 0;
 
       const embed = buildSprawdzGraczaEmbed({ nick, discordId, record, activePoints });
+      await interaction.reply({ embeds: [embed] });
+      return;
+    }
+
+    if (subcommand === 'sprawdz-auto') {
+      if (!(await requirePoliceRole(interaction, config))) return;
+
+      const plateNumber = interaction.options.getString('rejestracja');
+      const found = registry.findVehicleByPlate(plateNumber);
+
+      const embed = buildSprawdzAutoEmbed({
+        plateNumber,
+        discordId: found ? found.discordId : null,
+        discordTag: found ? found.discordTag : null,
+        vehicle: found ? found.vehicle : null,
+      });
       await interaction.reply({ embeds: [embed] });
       return;
     }
