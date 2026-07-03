@@ -22,6 +22,7 @@ function defaultRegistry() {
     robloxIndex: {},
     users: {},
     policeRecruitmentPanels: {},
+    pendingVehicles: {},
   };
 }
 
@@ -34,6 +35,7 @@ function load() {
       robloxIndex: parsed.robloxIndex || {},
       users: parsed.users || {},
       policeRecruitmentPanels: parsed.policeRecruitmentPanels || {},
+      pendingVehicles: parsed.pendingVehicles || {},
     };
   } catch (error) {
     if (error.code !== 'ENOENT') {
@@ -329,11 +331,37 @@ function getPoliceRecruitmentPanel(panelId) {
   return data.policeRecruitmentPanels[panelId] || null;
 }
 
+// Modal rejestracji pojazdu ma juz 5 pol (limit Discorda), wiec numer
+// rejestracyjny podawany recznie przez gracza zbiera drugi modal. Dane z
+// pierwszego modala trzymane sa krotko pod losowym pendingId - usuwane od
+// razu po odebraniu (jednorazowe, w przeciwienstwie do panelow rekrutacji).
+function savePendingVehicle(data) {
+  return mutate((registryData) => {
+    const pendingId = Math.random().toString(36).slice(2, 8);
+    registryData.pendingVehicles[pendingId] = data;
+    return pendingId;
+  });
+}
+
+function getPendingVehicle(pendingId) {
+  const data = load();
+  return data.pendingVehicles[pendingId] || null;
+}
+
+function deletePendingVehicle(pendingId) {
+  mutate((data) => {
+    delete data.pendingVehicles[pendingId];
+  });
+}
+
 module.exports = {
   linkRoblox,
   findDiscordIdByRobloxNick,
   getUserRecord,
   findVehicleByPlate,
+  savePendingVehicle,
+  getPendingVehicle,
+  deletePendingVehicle,
   recordIdCard,
   recordLicenseCategory,
   recordVehicle,

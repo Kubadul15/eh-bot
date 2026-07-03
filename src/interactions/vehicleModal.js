@@ -1,16 +1,15 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { buildVehicleCardEmbed } = require('../utils/embeds');
-const { generatePlateNumber, generateVin } = require('../utils/vehicle');
+const { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const registry = require('../utils/registry');
 const { parseYear } = require('../utils/validation');
 const {
   VEHICLE_MODAL_PREFIX,
-  VEHICLE_SEND_PREFIX,
+  VEHICLE_PLATE_MODAL_PREFIX,
   MODAL_FIELD_VEHICLE_MAKE,
   MODAL_FIELD_VEHICLE_YEAR,
   MODAL_FIELD_VEHICLE_COLOR,
   MODAL_FIELD_VEHICLE_ENGINE,
   MODAL_FIELD_VEHICLE_OWNER,
-  CANCEL_ID_BUTTON_ID,
+  MODAL_FIELD_VEHICLE_PLATE,
 } = require('./constants');
 
 async function handleVehicleModal(interaction) {
@@ -31,32 +30,25 @@ async function handleVehicleModal(interaction) {
     return;
   }
 
-  const embed = buildVehicleCardEmbed({
-    discordUser: interaction.user,
-    make,
-    year,
-    color,
-    engine,
-    owner,
-    category,
-    plateNumber: generatePlateNumber(),
-    vin: generateVin(),
-  });
+  // Modal ma juz maksymalne 5 pol (limit Discorda), wiec numer rejestracyjny
+  // zbiera drugi modal - dane z tego pierwszego trzymamy krotko w rejestrze
+  // pod losowym pendingId, zeby przetrwaly do momentu wypelnienia drugiego.
+  const pendingId = registry.savePendingVehicle({ channelId, category, make, year, color, engine, owner });
 
-  const row = new ActionRowBuilder().addComponents(
-    new ButtonBuilder()
-      .setCustomId(`${VEHICLE_SEND_PREFIX}:${channelId}`)
-      .setLabel('Wyślij')
-      .setStyle(ButtonStyle.Success),
-    new ButtonBuilder().setCustomId(CANCEL_ID_BUTTON_ID).setLabel('Anuluj').setStyle(ButtonStyle.Danger)
-  );
+  const plateModal = new ModalBuilder()
+    .setCustomId(`${VEHICLE_PLATE_MODAL_PREFIX}:${pendingId}`)
+    .setTitle('Numer rejestracyjny pojazdu');
 
-  await interaction.reply({
-    content: 'Oto podgląd dowodu rejestracyjnego — widoczny tylko dla Ciebie. Sprawdź dane i kliknij **Wyślij**.',
-    embeds: [embed],
-    components: [row],
-    ephemeral: true,
-  });
+  const plateInput = new TextInputBuilder()
+    .setCustomId(MODAL_FIELD_VEHICLE_PLATE)
+    .setLabel('Numer rejestracyjny')
+    .setStyle(TextInputStyle.Short)
+    .setMaxLength(12)
+    .setRequired(true);
+
+  plateModal.addComponents(new ActionRowBuilder().addComponents(plateInput));
+
+  await interaction.showModal(plateModal);
 }
 
 module.exports = { handleVehicleModal };

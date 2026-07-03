@@ -12,6 +12,7 @@ const { handleExamSendButton } = require('./examSendButton');
 const { handleVehicleStartButton } = require('./vehicleStartButton');
 const { handleVehicleCategorySelect } = require('./vehicleCategorySelect');
 const { handleVehicleModal } = require('./vehicleModal');
+const { handleVehiclePlateModal } = require('./vehiclePlateModal');
 const { handleVehicleSendButton } = require('./vehicleSendButton');
 const { handleTicketCreateButton } = require('./ticketCreateButton');
 const { handleTicketModal } = require('./ticketModal');
@@ -48,6 +49,7 @@ const {
   VEHICLE_START_PREFIX,
   VEHICLE_CATEGORY_PREFIX,
   VEHICLE_MODAL_PREFIX,
+  VEHICLE_PLATE_MODAL_PREFIX,
   VEHICLE_SEND_PREFIX,
   TICKET_CREATE_PREFIX,
   TICKET_MODAL_PREFIX,
@@ -133,6 +135,7 @@ async function routeInteraction(interaction, commands) {
       if (id.startsWith(`${VERIFY_MODAL_PREFIX}:`)) return await handleVerifyModal(interaction);
       if (id.startsWith(`${EXAM_MODAL_PREFIX}:`)) return await handleExamModal(interaction);
       if (id.startsWith(`${VEHICLE_MODAL_PREFIX}:`)) return await handleVehicleModal(interaction);
+      if (id.startsWith(`${VEHICLE_PLATE_MODAL_PREFIX}:`)) return await handleVehiclePlateModal(interaction);
       if (id.startsWith(`${TICKET_MODAL_PREFIX}:`)) return await handleTicketModal(interaction);
       if (id.startsWith(`${APP_MODAL_PREFIX}:`)) return await handleApplicationModal(interaction);
       if (id === APP_REJECT_MODAL_ID) return await handleApplicationRejectModal(interaction);
