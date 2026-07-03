@@ -43,6 +43,14 @@ builder.addSubcommand((sub) =>
     .setDescription('Wystawia mandat graczowi')
     .addUserOption((o) => o.setName('gracz').setDescription('Ukarany gracz').setRequired(true))
     .addIntegerOption((o) => o.setName('kwota').setDescription('Kwota mandatu w zł').setMinValue(1).setRequired(true))
+    .addIntegerOption((o) =>
+      o
+        .setName('punkty')
+        .setDescription('Punkty karne za wykroczenie (jak w prawdziwym systemie, 1-15)')
+        .setMinValue(1)
+        .setMaxValue(15)
+        .setRequired(true)
+    )
     .addStringOption((o) => o.setName('powod').setDescription('Powód wystawienia mandatu').setRequired(true))
 );
 
@@ -210,9 +218,10 @@ module.exports = {
       const nick = interaction.options.getString('nick');
       const discordId = registry.findDiscordIdByRobloxNick(nick);
       const record = discordId ? registry.getUserRecord(discordId) : null;
+      const activePoints = discordId ? registry.getActivePoints(discordId) : 0;
 
-      const embed = buildSprawdzGraczaEmbed({ nick, discordId, record });
-      await interaction.reply({ embeds: [embed], ephemeral: true });
+      const embed = buildSprawdzGraczaEmbed({ nick, discordId, record, activePoints });
+      await interaction.reply({ embeds: [embed] });
       return;
     }
 
@@ -221,21 +230,27 @@ module.exports = {
 
       const target = interaction.options.getUser('gracz');
       const amount = interaction.options.getInteger('kwota');
+      const points = interaction.options.getInteger('punkty');
       const reason = interaction.options.getString('powod');
 
-      registry.addCitation(target.id, target.tag, {
+      const { activePoints, autoSuspended } = registry.addCitation(target.id, target.tag, {
         reason,
         amount,
+        points,
         issuedBy: interaction.user.id,
         issuedByTag: interaction.user.tag,
       });
 
-      const embed = buildMandatEmbed({ officer: interaction.user, target, amount, reason });
+      const embed = buildMandatEmbed({ officer: interaction.user, target, amount, points, reason, activePoints, autoSuspended });
       await interaction.reply({ embeds: [embed] });
 
       await sendAdminLog(interaction.client, {
         title: '📋 Wystawiono mandat',
-        description: `**Kto:** ${target} (${target.tag})\n**Kwota:** ${amount} zł\n**Powód:** ${reason}\n**Funkcjonariusz:** <@${interaction.user.id}>`,
+        description:
+          `**Kto:** ${target} (${target.tag})\n**Kwota:** ${amount} zł\n**Punkty:** ${points} (aktywne: ${activePoints}/${registry.MAX_POINTS_BEFORE_SUSPENSION})\n` +
+          `**Powód:** ${reason}\n**Funkcjonariusz:** <@${interaction.user.id}>` +
+          (autoSuspended ? '\n🚫 **Automatycznie zawieszono prawo jazdy (przekroczono limit punktów).**' : ''),
+        color: autoSuspended ? '#e02b2b' : undefined,
       });
       return;
     }

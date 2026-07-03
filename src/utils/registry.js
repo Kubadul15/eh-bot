@@ -56,6 +56,11 @@ function mutate(fn) {
   return result;
 }
 
+// Jak w prawdziwym polskim systemie: 24 aktywne punkty karne = automatyczne
+// zawieszenie prawa jazdy, a punkty "kasują się" po roku od wystawienia mandatu.
+const MAX_POINTS_BEFORE_SUSPENSION = 24;
+const POINTS_EXPIRY_MS = 365 * 24 * 60 * 60 * 1000;
+
 function defaultUser() {
   return {
     discordTag: null,
@@ -67,6 +72,13 @@ function defaultUser() {
     wanted: null,
     police: { rank: null, cbsp: false, dutyStart: null, totalDutyMs: 0 },
   };
+}
+
+function calculateActivePoints(user, now = Date.now()) {
+  if (!user) return 0;
+  return user.citations
+    .filter((citation) => now - citation.issuedAt <= POINTS_EXPIRY_MS)
+    .reduce((sum, citation) => sum + Number(citation.points || 0), 0);
 }
 
 function ensureUser(data, discordId, discordTag) {
@@ -132,11 +144,30 @@ function recordVehicle(discordId, discordTag, { make, year, color, engine, categ
   });
 }
 
-function addCitation(discordId, discordTag, { reason, amount, issuedBy, issuedByTag }) {
-  mutate((data) => {
+function addCitation(discordId, discordTag, { reason, amount, points, issuedBy, issuedByTag }) {
+  return mutate((data) => {
     const user = ensureUser(data, discordId, discordTag);
-    user.citations.push({ reason, amount, issuedBy, issuedByTag, issuedAt: Date.now() });
+    const issuedAt = Date.now();
+    user.citations.push({ reason, amount, points, issuedBy, issuedByTag, issuedAt });
+
+    const activePoints = calculateActivePoints(user, issuedAt);
+    let autoSuspended = false;
+    if (activePoints >= MAX_POINTS_BEFORE_SUSPENSION && !user.license.suspended) {
+      user.license.suspended = true;
+      user.license.suspendedReason = `Automatyczne zawieszenie — przekroczono ${MAX_POINTS_BEFORE_SUSPENSION} aktywnych punktów karnych.`;
+      user.license.suspendedBy = null;
+      user.license.suspendedById = null;
+      user.license.suspendedAt = issuedAt;
+      autoSuspended = true;
+    }
+
+    return { activePoints, autoSuspended };
   });
+}
+
+function getActivePoints(discordId) {
+  const data = load();
+  return calculateActivePoints(data.users[discordId], Date.now());
 }
 
 function setWanted(discordId, discordTag, { reason, issuedBy, issuedByTag }) {
@@ -254,6 +285,8 @@ module.exports = {
   recordLicenseCategory,
   recordVehicle,
   addCitation,
+  getActivePoints,
+  MAX_POINTS_BEFORE_SUSPENSION,
   setWanted,
   clearWanted,
   setLicenseSuspended,
