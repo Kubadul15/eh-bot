@@ -117,6 +117,27 @@ function getUserRecord(discordId) {
   return data.users[discordId] || null;
 }
 
+function normalizePlate(plateNumber) {
+  return plateNumber.toUpperCase().replace(/\s+/g, '');
+}
+
+// Szuka pojazdu po numerze rejestracyjnym po wszystkich zarejestrowanych
+// uzytkownikach - normalizuje wielkosc liter i spacje, zeby "GD X1234" i
+// "gdx1234" trafialy w ten sam wpis.
+function findVehicleByPlate(plateNumber) {
+  const data = load();
+  const target = normalizePlate(plateNumber);
+
+  for (const [discordId, user] of Object.entries(data.users)) {
+    const vehicle = user.vehicles.find((v) => normalizePlate(v.plateNumber) === target);
+    if (vehicle) {
+      return { discordId, discordTag: user.discordTag, vehicle };
+    }
+  }
+
+  return null;
+}
+
 function recordIdCard(discordId, discordTag, { fullName, age, citizenship, idNumber, robloxUsername }) {
   mutate((data) => {
     const user = ensureUser(data, discordId, discordTag);
@@ -312,6 +333,7 @@ module.exports = {
   linkRoblox,
   findDiscordIdByRobloxNick,
   getUserRecord,
+  findVehicleByPlate,
   recordIdCard,
   recordLicenseCategory,
   recordVehicle,
