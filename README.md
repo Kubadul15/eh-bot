@@ -105,7 +105,8 @@ się osobno na każdym z nich), ale cały `/policja` (wszystkie podkomendy, łą
 wyłącznie na jednym, skonfigurowanym serwerze** — na każdym innym serwerze bot grzecznie odmówi wykonania
 komendy. Ten jeden serwer ustawia się osobną zmienną `POLICE_GUILD_ID` (domyślnie już ustawiona na główny
 serwer Gdańsk RP). `/panel` nie ma tego ograniczenia — działa normalnie na każdym serwerze wymienionym w
-`GUILD_ID`.
+`GUILD_ID`. **Ten serwer policyjny jest zawsze automatycznie dopisywany do listy rejestracji komend**,
+nawet jeśli zapomnisz go dodać w `GUILD_ID` na Railway — nie trzeba go tam osobno wpisywać.
 
 - **`/policja rekrutacja kanal:#kanał kategoria:<kategoria> rola-obslugi:@rola [ranga-po-akceptacji:@rola]`**
   — osobny panel rekrutacji, tematycznie oznaczony jako nabór do **Komendy Miejskiej Policji (KMP)**.
