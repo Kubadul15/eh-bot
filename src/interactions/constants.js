@@ -41,9 +41,12 @@ module.exports = {
   MODAL_FIELD_VEHICLE_OWNER: 'vehicle_owner',
   // Modal pojazdu ma juz maksymalne 5 pol (limit Discorda), wiec numer
   // rejestracyjny podawany recznie przez gracza zbiera osobny, drugi modal.
-  // Dane z pierwszego modala trzymane sa krotko w rejestrze pod losowym
-  // pendingId (patrz registry.savePendingVehicle) - customId drugiego
-  // modala niesie tylko ten krotki identyfikator.
+  // Discord NIE pozwala pokazac modala w odpowiedzi na modal (tylko na
+  // komende albo klikniecie przycisku/select menu), wiec miedzy nimi jest
+  // jeszcze przycisk VEHICLE_PLATE_START_PREFIX. Dane z pierwszego modala
+  // trzymane sa krotko w rejestrze pod losowym pendingId (patrz
+  // registry.savePendingVehicle) - customId niesie tylko ten identyfikator.
+  VEHICLE_PLATE_START_PREFIX: 'vehicle_plate_start',
   VEHICLE_PLATE_MODAL_PREFIX: 'vehicle_plate_modal',
   MODAL_FIELD_VEHICLE_PLATE: 'vehicle_plate',
 
