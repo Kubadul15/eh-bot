@@ -22,4 +22,15 @@ function parseYear(rawYear) {
   return year;
 }
 
-module.exports = { parseAge, parseYear };
+/**
+ * Parsuje numer rejestracyjny pojazdu podany przez gracza. Zwraca
+ * znormalizowany (wielkie litery, przycieta biala spacja) numer albo
+ * null, jesli zawiera niedozwolone znaki lub ma nieprawidlowa dlugosc.
+ */
+function parsePlateNumber(rawPlate) {
+  const trimmed = rawPlate.trim().toUpperCase();
+  if (!/^[A-Z0-9 -]{3,12}$/.test(trimmed)) return null;
+  return trimmed;
+}
+
+module.exports = { parseAge, parseYear, parsePlateNumber };

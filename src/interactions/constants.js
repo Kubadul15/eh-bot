@@ -39,6 +39,13 @@ module.exports = {
   MODAL_FIELD_VEHICLE_COLOR: 'vehicle_color',
   MODAL_FIELD_VEHICLE_ENGINE: 'vehicle_engine',
   MODAL_FIELD_VEHICLE_OWNER: 'vehicle_owner',
+  // Modal pojazdu ma juz maksymalne 5 pol (limit Discorda), wiec numer
+  // rejestracyjny podawany recznie przez gracza zbiera osobny, drugi modal.
+  // Dane z pierwszego modala trzymane sa krotko w rejestrze pod losowym
+  // pendingId (patrz registry.savePendingVehicle) - customId drugiego
+  // modala niesie tylko ten krotki identyfikator.
+  VEHICLE_PLATE_MODAL_PREFIX: 'vehicle_plate_modal',
+  MODAL_FIELD_VEHICLE_PLATE: 'vehicle_plate',
 
   // Panel ticketow. Kategoria i rola obslugi sa zakodowane w customId
   // przycisku startowego, a caly stan konkretnego ticketu (wlasciciel,
