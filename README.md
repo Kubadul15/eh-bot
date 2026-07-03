@@ -43,10 +43,12 @@ Bot Discord do obsługi paneli weryfikacyjnych serwera oraz systemu policyjnego 
   wydarzy. Jeśli rola się zgadza, gracz wybiera z listy **typ/kategorię pojazdu** (ta sama lista co przy
   prawie jazdy), a potem wypełnia formularz: marka i model, rok produkcji, kolor, silnik/pojemność,
   właściciel (imię i nazwisko RP). **Rok produkcji musi być prawidłową czterocyfrową liczbą** (1900 do
-  przyszłego roku) — inaczej bot odrzuci formularz. Ponieważ Discord ogranicza modal do 5 pól, **numer
-  rejestracyjny gracz podaje sam w drugim, osobnym okienku** — musi być unikalny (bot sprawdza w rejestrze
-  i odrzuci numer już zajęty przez inny pojazd) i może zawierać tylko litery, cyfry, spacje i myślniki
-  (3–12 znaków). Bot automatycznie generuje jeszcze 17-znakowy **numer VIN**, datę rejestracji oraz roczną
+  przyszłego roku) — inaczej bot odrzuci formularz. Ponieważ Discord ogranicza modal do 5 pól (i nie
+  pozwala pokazać drugiego modala w odpowiedzi na pierwszy), **numer rejestracyjny gracz podaje sam w
+  drugim okienku, otwieranym przyciskiem "Podaj numer rejestracyjny"** zaraz po pierwszym formularzu — musi
+  być unikalny (bot sprawdza w rejestrze i odrzuci numer już zajęty przez inny pojazd) i może zawierać
+  tylko litery, cyfry, spacje i myślniki (3–12 znaków). Bot automatycznie generuje jeszcze 17-znakowy
+  **numer VIN**, datę rejestracji oraz roczną
   ważność przeglądu i OC — wszystko trafia na kartę **Dowód Rejestracyjny Pojazdu RP**, którą gracz wysyła
   przyciskiem **Wyślij** na skonfigurowany kanał.
 
