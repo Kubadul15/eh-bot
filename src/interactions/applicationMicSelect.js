@@ -28,7 +28,7 @@ async function handleApplicationMicSelect(interaction) {
 
   const otherServersInput = new TextInputBuilder()
     .setCustomId(MODAL_FIELD_APP_OTHER_SERVERS)
-    .setLabel('Byłeś na innych serwerach? Jeśli tak, na jakich?')
+    .setLabel('Byłeś na innych serwerach? Jakich?')
     .setStyle(TextInputStyle.Paragraph)
     .setMaxLength(300)
     .setRequired(true);
