@@ -229,9 +229,10 @@ odwrotnie.
 
 ## Sesje RP (`/roleplay`)
 
-- **`/roleplay start`** — rozpoczyna nową sesję RP na serwerze: generuje losowy, krótki **kod sesji** (np.
-  `4anxw6y1`) i publikuje embed pokazujący ten kod oraz kto sesję rozpoczął (osoba, która użyła komendy).
-  Jeśli sesja już trwa, komenda odmawia i przypomina istniejący kod oraz kto ją rozpoczął.
+- **`/roleplay start`** — rozpoczyna nową sesję RP na serwerze: publikuje embed z **stałym kodem sesji**
+  (domyślnie `pt9iqi8i`, ten sam za każdym razem — można nadpisać zmienną `ROLEPLAY_SESSION_CODE`) oraz
+  informacją, kto sesję rozpoczął (osoba, która użyła komendy). Jeśli sesja już trwa, komenda odmawia i
+  przypomina, kto ją rozpoczął.
 - **`/roleplay stop`** — kończy aktualnie trwającą sesję: pokazuje kod sesji, kto ją rozpoczął, kto ją
   zakończył (może to być inna osoba niż ta, która startowała) oraz jak długo trwała.
 
