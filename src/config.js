@@ -30,6 +30,10 @@ const legacyGuildId = process.env.LEGACY_GUILD_ID || '1521870662162190388';
 // zmienna ROBLOX_BAN_CHANNEL_ID.
 const robloxBanChannelId = process.env.ROBLOX_BAN_CHANNEL_ID || '1522589245267644557';
 
+// Kod sesji RP jest stale (jeden, ten sam kazdorazowo), nie losowany -
+// mozna go nadpisac zmienna ROLEPLAY_SESSION_CODE.
+const roleplaySessionCode = process.env.ROLEPLAY_SESSION_CODE || 'pt9iqi8i';
+
 // GUILD_ID moze byc jednym ID albo lista ID rozdzielona przecinkami, jesli
 // bot ma dzialac (i miec zarejestrowane slash commands) na wiecej niz jednym
 // serwerze - patrz deploy-commands.js, ktore rejestruje komendy na kazdym
@@ -61,4 +65,5 @@ module.exports = {
   policeGuildId,
   legacyGuildId,
   robloxBanChannelId,
+  roleplaySessionCode,
 };

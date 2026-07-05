@@ -357,18 +357,14 @@ function deletePendingVehicle(pendingId) {
 }
 
 // Jedna, globalna sesja RP na caly serwer (nie per-uzytkownik jak sluzba
-// policyjna) - /roleplay start/stop. Kod sesji to krotki losowy identyfikator,
-// zeby graczom bylo latwo sie do niej odwolac (np. w innych kanalach/logach).
-function generateSessionCode() {
-  return Math.random().toString(36).slice(2, 10);
-}
-
+// policyjna) - /roleplay start/stop. Kod sesji jest stale ustalony
+// (config.roleplaySessionCode), nie losowany za kazdym razem.
 function startRoleplaySession(discordId, discordTag) {
   return mutate((data) => {
     if (data.roleplaySession) {
       return { alreadyActive: true, session: data.roleplaySession };
     }
-    const session = { code: generateSessionCode(), startedBy: discordId, startedByTag: discordTag, startedAt: Date.now() };
+    const session = { code: config.roleplaySessionCode, startedBy: discordId, startedByTag: discordTag, startedAt: Date.now() };
     data.roleplaySession = session;
     return { alreadyActive: false, session };
   });
