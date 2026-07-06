@@ -18,7 +18,6 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('robloxban')
     .setDescription('Wystawia ban na nick Roblox i publikuje go na kanale logów banów')
-    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .addStringOption((o) => o.setName('nick').setDescription('Nick Roblox banowanego gracza').setRequired(true))
     .addStringOption((o) =>
       o.setName('czas').setDescription('Liczba dni (np. 7) albo "perm" dla bana permanentnego').setRequired(true)
