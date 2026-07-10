@@ -39,7 +39,7 @@ module.exports = {
         .setImage(ROLEPLAY_IMAGE_URL)
         .setFooter({ text: config.serverName })
         .setTimestamp();
-      await interaction.reply({ embeds: [embed] });
+      await interaction.reply({ content: `<@&${config.roleplayPingRoleId}>`, embeds: [embed] });
       return;
     }
     if (subcommand === 'stop') {
