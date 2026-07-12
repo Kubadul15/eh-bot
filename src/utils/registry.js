@@ -292,15 +292,51 @@ function endHouseAuction(auctionId, { endedBy, endedByTag }) {
 
 // Jedna, globalna sesja RP na caly serwer (nie per-uzytkownik) - /roleplay
 // start/stop. Kod sesji jest stale ustalony (config.roleplaySessionCode),
-// nie losowany za kazdym razem.
-function startRoleplaySession(discordId, discordTag) {
+// nie losowany za kazdym razem. Sesja startuje jako "oczekujaca" (ogloszenie
+// z reakcjami) i dopiero po osiagnieciu progu reakcji (patrz
+// interactions/roleplayReactionAdd.js) zostaje oznaczona jako "started".
+function startRoleplaySession(discordId, discordTag, { goal, minReactions }) {
   return mutate((data) => {
     if (data.roleplaySession) {
       return { alreadyActive: true, session: data.roleplaySession };
     }
-    const session = { code: config.roleplaySessionCode, startedBy: discordId, startedByTag: discordTag, startedAt: Date.now() };
+    const session = {
+      code: config.roleplaySessionCode,
+      startedBy: discordId,
+      startedByTag: discordTag,
+      startedAt: Date.now(),
+      goal,
+      minReactions,
+      channelId: null,
+      messageId: null,
+      started: false,
+    };
     data.roleplaySession = session;
     return { alreadyActive: false, session };
+  });
+}
+
+// Wywolywane zaraz po wyslaniu ogloszenia sesji, kiedy znamy juz ID
+// wiadomosci/kanalu - potrzebne, zeby handler reakcji wiedzial, ktora
+// wiadomosc obserwowac (i przetrwalo restart bota).
+function setRoleplaySessionMessage(channelId, messageId) {
+  mutate((data) => {
+    if (data.roleplaySession) {
+      data.roleplaySession.channelId = channelId;
+      data.roleplaySession.messageId = messageId;
+    }
+  });
+}
+
+// Oznacza sesje jako rozpoczeta po osiagnieciu progu reakcji. Zwraca null,
+// jesli nie ma aktywnej sesji albo juz zostala oznaczona (np. dwa
+// jednoczesne zdarzenia reakcji) - dzieki temu wywolujacy wie, ze to on
+// pierwszy przekroczyl prog i to on ma wyslac ogloszenie startu.
+function markRoleplaySessionStarted() {
+  return mutate((data) => {
+    if (!data.roleplaySession || data.roleplaySession.started) return null;
+    data.roleplaySession.started = true;
+    return { ...data.roleplaySession };
   });
 }
 
@@ -337,6 +373,8 @@ module.exports = {
   placeBid,
   endHouseAuction,
   startRoleplaySession,
+  setRoleplaySessionMessage,
+  markRoleplaySessionStarted,
   stopRoleplaySession,
   getRoleplaySession,
   recordIdCard,
