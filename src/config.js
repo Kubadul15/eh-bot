@@ -16,15 +16,14 @@ function requireEnv(name) {
 // na sciezke montowania (np. /data/registry.json) - patrz README.
 const rawRegistryPath = process.env.REGISTRY_PATH || 'data/registry.json';
 
-// Bot moze byc zaproszony na wiecej niz jeden serwer, ale caly system
-// policyjny (/policja) ma dzialac wylacznie na jednym, glownym serwerze -
-// domyslna wartosc ponizej mozna nadpisac zmienna POLICE_GUILD_ID.
-const policeGuildId = process.env.POLICE_GUILD_ID || '1522536500242284685';
+// Jedyny serwer bota (Małopolska RP) - domyslna wartosc ponizej mozna
+// nadpisac zmienna POLICE_GUILD_ID, gdyby jednak trzeba bylo rozdzielic
+// system policyjny (/policja) na inny serwer niz reszta bota.
+const policeGuildId = process.env.POLICE_GUILD_ID || '1515306861241565352';
 
 // Odwrotna sytuacja: /robloxban ma dzialac wylacznie na "starym" serwerze
-// (tym sprzed dodania serwera policyjnego), niezaleznie od tego, na ilu
-// serwerach bot jest obecny.
-const legacyGuildId = process.env.LEGACY_GUILD_ID || '1521870662162190388';
+// (domyslnie ten sam, jedyny serwer, ale mozna nadpisac osobno).
+const legacyGuildId = process.env.LEGACY_GUILD_ID || '1515306861241565352';
 
 // Kanal, na ktory /robloxban wysyla embed z banem - mozna nadpisac
 // zmienna ROBLOX_BAN_CHANNEL_ID.
@@ -46,12 +45,13 @@ const houseAuctionAdminRoleId = process.env.HOUSE_AUCTION_ADMIN_ROLE_ID || '1523
 // GUILD_ID moze byc jednym ID albo lista ID rozdzielona przecinkami, jesli
 // bot ma dzialac (i miec zarejestrowane slash commands) na wiecej niz jednym
 // serwerze - patrz deploy-commands.js, ktore rejestruje komendy na kazdym
-// z nich osobno. Serwer policyjny (policeGuildId) jest zawsze dolaczany do
-// tej listy na sztywno, zeby literowka albo pominiecie go w GUILD_ID na
-// Railway nie zostawily tego serwera bez zarejestrowanych komend.
+// z nich osobno. Domyslnie jest to jedyny serwer bota (Małopolska RP);
+// policeGuildId jest zawsze dolaczany do tej listy na sztywno, zeby
+// literowka albo pominiecie go w GUILD_ID na Railway nie zostawily tego
+// serwera bez zarejestrowanych komend.
 const guildIds = Array.from(
   new Set([
-    ...requireEnv('GUILD_ID')
+    ...(process.env.GUILD_ID || '1515306861241565352')
       .split(',')
       .map((id) => id.trim())
       .filter(Boolean),
@@ -66,7 +66,7 @@ module.exports = {
   guildIds,
   targetChannelId,
   idPrefix: process.env.ID_PREFIX || 'EH',
-  serverName: process.env.SERVER_NAME || 'Emergency Hamburg ROLEPLAY | Gdansk RP',
+  serverName: process.env.SERVER_NAME || 'Emergency Hamburg ROLEPLAY | Małopolska RP',
   embedColor: process.env.EMBED_COLOR || '#8b5cf6',
   // Opcjonalny - jesli nie ustawiony, logowanie administracyjne jest pomijane.
   adminLogChannelId: process.env.ADMIN_LOG_CHANNEL_ID || null,

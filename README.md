@@ -1,4 +1,4 @@
-# Emergency Hamburg RP — Bot Discord (Gdańsk RP)
+# Emergency Hamburg RP — Bot Discord (Małopolska RP)
 
 Bot Discord do obsługi paneli weryfikacyjnych serwera oraz systemu policyjnego RP. Aktualnie dostępne panele:
 
@@ -108,8 +108,8 @@ W odróżnieniu od `/panel` (który tylko **publikuje** panele dla graczy), `/po
 przyjmuje listę ID rozdzieloną przecinkami — patrz sekcja "Wdrożenie na Railway" niżej, komendy rejestrują
 się osobno na każdym z nich), ale cały `/policja` (wszystkie podkomendy, łącznie z `rekrutacja`) **działa
 wyłącznie na jednym, skonfigurowanym serwerze** — na każdym innym serwerze bot grzecznie odmówi wykonania
-komendy. Ten jeden serwer ustawia się osobną zmienną `POLICE_GUILD_ID` (domyślnie już ustawiona na główny
-serwer Gdańsk RP). `/panel` nie ma tego ograniczenia — działa normalnie na każdym serwerze wymienionym w
+komendy. Ten jeden serwer ustawia się osobną zmienną `POLICE_GUILD_ID` (domyślnie już ustawiona na jedyny
+serwer bota — Małopolska RP). `/panel` nie ma tego ograniczenia — działa normalnie na każdym serwerze wymienionym w
 `GUILD_ID`. **Ten serwer policyjny jest zawsze automatycznie dopisywany do listy rejestracji komend**,
 nawet jeśli zapomnisz go dodać w `GUILD_ID` na Railway — nie trzeba go tam osobno wpisywać.
 
@@ -248,7 +248,7 @@ w tym samym trwałym rejestrze co reszta danych (patrz sekcja "Trwały rejestr d
 5. W zakładce **OAuth2 → URL Generator** zaznacz scope `bot` oraz `applications.commands`,
    z uprawnień zaznacz co najmniej: *Send Messages*, *Embed Links*, *Use Slash Commands*, *Manage Roles*
    (nadawanie ról), *Manage Channels* (tworzenie/usuwanie kanałów ticketów).
-   Wygenerowanym linkiem zaproś bota na serwer Gdańsk RP — **i na każdy kolejny serwer, na którym ma
+   Wygenerowanym linkiem zaproś bota na serwer Małopolska RP — **i na każdy kolejny serwer, na którym ma
    działać** (tym samym linkiem, tylko wybierz inny serwer w oknie zaproszenia).
 6. Włącz Developer Mode w Discordzie (Ustawienia → Zaawansowane), kliknij PPM na serwer →
    **Kopiuj ID serwera** (to `GUILD_ID` — jeśli bot ma działać na kilku serwerach, zbierz ID każdego z nich
@@ -266,10 +266,10 @@ w tym samym trwałym rejestrze co reszta danych (patrz sekcja "Trwały rejestr d
    |---|---|
    | `DISCORD_TOKEN` | token bota |
    | `CLIENT_ID` | Application ID |
-   | `GUILD_ID` | ID serwera Gdańsk RP (lub kilka ID po przecinku, jeśli bot ma działać na kilku serwerach) |
+   | `GUILD_ID` | ID jedynego serwera bota — Małopolska RP (lub kilka ID po przecinku, jeśli bot ma działać na kilku serwerach) |
    | `TARGET_CHANNEL_ID` | ID kanału, na który trafiają zatwierdzone dowody |
    | `ID_PREFIX` | np. `EH` — prefiks numeru dowodu |
-   | `SERVER_NAME` | np. `Emergency Hamburg ROLEPLAY \| Gdańsk RP` |
+   | `SERVER_NAME` | np. `Emergency Hamburg ROLEPLAY \| Małopolska RP` |
    | `EMBED_COLOR` | np. `#8b5cf6` |
    | `ADMIN_LOG_CHANNEL_ID` | opcjonalnie — ID kanału logów administracyjnych |
    | `REGISTRY_PATH` | opcjonalnie — ścieżka trwałego rejestru; ustaw dopiero po podpięciu Volume (patrz sekcja "System Policyjny" niżej) |

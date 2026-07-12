@@ -1,7 +1,7 @@
 {
   "name": "emergency-hamburg-rp-bot",
   "version": "1.0.0",
-  "description": "Bot Discord dla serwera Emergency Hamburg ROLEPLAY / Gdansk RP - panele weryfikacyjne (Dowod Osobisty RP)",
+  "description": "Bot Discord dla serwera Emergency Hamburg ROLEPLAY / Malopolska RP - panele weryfikacyjne (Dowod Osobisty RP)",
   "main": "src/index.js",
   "type": "commonjs",
   "engines": {
