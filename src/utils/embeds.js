@@ -339,6 +339,25 @@ function buildAuctionEmbed(auction, auctionId) {
     .setTimestamp();
 }
 
+function buildRoleplaySessionEmbed({ startedBy, goal, minReactions, startedAt, code }) {
+  return new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setTitle('🎭 SESJA ROLEPLAY')
+    .addFields(
+      { name: '🔊 Ping', value: '@everyone', inline: false },
+      { name: '📨 Ogłaszający', value: `<@${startedBy}>`, inline: false },
+      { name: '🎯 Cel RP', value: goal, inline: false },
+      { name: '🕐 Czas rozpoczęcia rolepleyu', value: `<t:${Math.floor(startedAt / 1000)}:t>`, inline: false },
+      {
+        name: '✅ Minimalna liczba reakcji',
+        value: `${minReactions}\n*(Po osiągnięciu wymaganej liczby reakcji sesja zostanie rozpoczęta)*`,
+        inline: false,
+      },
+      { name: '🔑 Kod sesji', value: `\`${code}\``, inline: false },
+      { name: '​', value: '📌 Miłej zabawy !', inline: false }
+    );
+}
+
 module.exports = {
   buildPanelEmbed,
   buildIdCardEmbed,
@@ -356,4 +375,5 @@ module.exports = {
   buildHouseCardEmbed,
   buildAuctionPanelEmbed,
   buildAuctionEmbed,
+  buildRoleplaySessionEmbed,
 };

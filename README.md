@@ -149,15 +149,25 @@ grzecznie odmówi działania.
 
 ## Sesje RP (`/roleplay`)
 
-- **`/roleplay start`** — rozpoczyna nową sesję RP na serwerze: publikuje embed z **stałym kodem sesji**
-  (domyślnie `pt9iqi8i`, ten sam za każdym razem — można nadpisać zmienną `ROLEPLAY_SESSION_CODE`) oraz
-  informacją, kto sesję rozpoczął (osoba, która użyła komendy). Jeśli sesja już trwa, komenda odmawia i
+- **`/roleplay start cel:<opis> min-reakcji:<liczba>`** *(wymaga uprawnienia Discorda Wspominaj
+  wszystkich)* — ogłasza nową sesję RP: wysyła **"@everyone"** razem z embedem **"🎭 SESJA ROLEPLAY"**
+  zawierającym ogłaszającego, cel RP, godzinę rozpoczęcia (dynamiczny znacznik czasu, wyświetlany w
+  strefie czasowej każdego odbiorcy), minimalną liczbę reakcji potrzebną do startu oraz **stały kod sesji**
+  (domyślnie `mtyp5dgy`, ten sam za każdym razem — można nadpisać zmienną `ROLEPLAY_SESSION_CODE`). Bot od
+  razu dodaje pod wiadomością reakcję ✅ — gdy liczba **innych** osób, które ją klikną, osiągnie
+  `min-reakcji`, sesja jest automatycznie oznaczana jako rozpoczęta: embed dostaje status "🟢 Rozpoczęto!",
+  a na kanale pojawia się krótkie ogłoszenie startu z celem RP. Jeśli sesja już trwa, komenda odmawia i
   przypomina, kto ją rozpoczął.
-- **`/roleplay stop`** — kończy aktualnie trwającą sesję: pokazuje kod sesji, kto ją rozpoczął, kto ją
-  zakończył (może to być inna osoba niż ta, która startowała) oraz jak długo trwała.
+- **`/roleplay stop`** — kończy aktualnie trwającą sesję (niezależnie od tego, czy próg reakcji został
+  osiągnięty): pokazuje cel RP, kto ją rozpoczął, kto ją zakończył (może to być inna osoba niż ta, która
+  startowała) oraz jak długo trwała.
 
-Sesja jest jedna, globalna dla całego serwera (nie per-gracz) i przetrwa restart bota — stan trzymany jest
-w tym samym trwałym rejestrze co reszta danych (patrz sekcja "Trwały rejestr danych" wyżej).
+Sesja jest jedna, globalna dla całego serwera (nie per-gracz) i przetrwa restart bota — stan (łącznie z ID
+wiadomości ogłoszenia, do którego nasłuchuje handler reakcji) trzymany jest w tym samym trwałym rejestrze co
+reszta danych (patrz sekcja "Trwały rejestr danych" wyżej), więc liczenie reakcji działa poprawnie nawet
+jeśli bot zrestartuje się w trakcie oczekiwania na próg. Bot musi mieć uprawnienie do wysyłania wiadomości i
+dodawania reakcji na kanale, na którym uruchamiasz `/roleplay start`, a Ty sam musisz mieć uprawnienie
+**Wspominaj wszystkich**, żeby w ogóle móc użyć tej podkomendy.
 
 ## Wymagania
 
@@ -174,7 +184,8 @@ w tym samym trwałym rejestrze co reszta danych (patrz sekcja "Trwały rejestr d
    bez weryfikacji dla botów na mniej niż 100 serwerach) — potrzebne do transkryptów zamykanych ticketów.
 5. W zakładce **OAuth2 → URL Generator** zaznacz scope `bot` oraz `applications.commands`,
    z uprawnień zaznacz co najmniej: *Send Messages*, *Embed Links*, *Use Slash Commands*, *Manage Roles*
-   (nadawanie ról), *Manage Channels* (tworzenie/usuwanie kanałów ticketów).
+   (nadawanie ról), *Manage Channels* (tworzenie/usuwanie kanałów ticketów), *Add Reactions* i
+   *Mention Everyone* (potrzebne do `/roleplay start`).
    Wygenerowanym linkiem zaproś bota na serwer Małopolska RP — **i na każdy kolejny serwer, na którym ma
    działać** (tym samym linkiem, tylko wybierz inny serwer w oknie zaproszenia).
 6. Włącz Developer Mode w Discordzie (Ustawienia → Zaawansowane), kliknij PPM na serwer →

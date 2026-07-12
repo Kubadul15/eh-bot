@@ -26,7 +26,7 @@ const robloxBanChannelId = process.env.ROBLOX_BAN_CHANNEL_ID || '152258924526764
 
 // Kod sesji RP jest stale (jeden, ten sam kazdorazowo), nie losowany -
 // mozna go nadpisac zmienna ROLEPLAY_SESSION_CODE.
-const roleplaySessionCode = process.env.ROLEPLAY_SESSION_CODE || 'pt9iqi8i';
+const roleplaySessionCode = process.env.ROLEPLAY_SESSION_CODE || 'mtyp5dgy';
 
 // Kanal, na ktory trafiaja zatwierdzone dowody (klik "Wyslij") - mozna
 // nadpisac zmienna TARGET_CHANNEL_ID.
