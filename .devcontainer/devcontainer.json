@@ -1,6 +1,6 @@
 {
   "name": "emergency-hamburg-rp-bot",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bullseye",
   "postCreateCommand": "npm install",
   "customizations": {
     "vscode": {

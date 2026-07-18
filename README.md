@@ -171,7 +171,7 @@ dodawania reakcji na kanale, na którym uruchamiasz `/roleplay start`, a Ty sam 
 
 ## Wymagania
 
-- Node.js 20+
+- Node.js 24+
 - Konto Discord Developer (aplikacja + bot)
 - Konto na https://railway.app (hosting 24/7, połączony z tym repo na GitHubie)
 
